@@ -1,16 +1,30 @@
 import pandas as pd
 import numpy as np
 import pickle
+from Functions import print_confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import accuracy_score, confusion_matrix
 
 X_validation = pd.read_csv("test1.csv")
 
 X_validation = X_validation.iloc[:,1:]
 
-import os
 
 filename = 'RandomForest_1'
 with open(filename, 'rb') as f:
     r_forest1 = pickle.load(f)
+
+plt.figure(figsize=(12,12),dpi=100)
+rforest_confusion = confusion_matrix(np.array(["walk"]*35), r_forest1.predict(X_validation),labels=["car", "walk" , "bike","train","bus"])
+sns.heatmap(rforest_confusion, cmap=plt.cm.Blues, annot=True, square=True,fmt = ",d",
+           xticklabels=["car", "walk" , "bike","train","bus"],
+            yticklabels=["car", "walk" , "bike","train","bus"],)
+
+plt.xlabel('Predicted mode')
+plt.ylabel('Actual mode')
+plt.title('Validation set')
+plt.savefig("Validation.eps",format="eps")
 
 q_label = list(r_forest1.predict(X_validation))
 
