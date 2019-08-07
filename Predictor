@@ -1,0 +1,16 @@
+import pandas as pd
+import numpy as np
+import pickle
+
+X_validation = pd.read_csv("test1.csv")
+
+X_validation = X_validation.iloc[:,1:]
+
+import os
+
+filename = 'RandomForest_1'
+with open(filename, 'rb') as f:
+    r_forest1 = pickle.load(f)
+
+q_label = list(r_forest1.predict(X_validation))
+
